@@ -16,5 +16,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      # A test step is added once the first tests land (auth feature).
-      # - run: npm test
+      - run: npm test
+        env:
+          JWT_SECRET: test-only-secret-do-not-use
+          JWT_EXPIRES_IN: 1h
+          POSTGRES_URL: postgres://test:test@localhost:5432/test_db
+          MONGO_URL: mongodb://localhost:27017/test_db
+          POSTGRES_SSL: "false"
