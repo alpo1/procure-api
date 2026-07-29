@@ -1,5 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import pinoHttp from "pino-http";
+import { authRouter } from "./routes/auth.routes";
+import { AppError } from "./errors/app-error";
 
 // The Express app is built here (routes + middleware) but NOT started.
 // server.ts is responsible for connecting to the databases and listening.
@@ -15,7 +17,7 @@ app.get("/health", (_req: Request, res: Response) => {
 });
 
 // Feature routers will be mounted here as we build them:
-// app.use("/auth", authRouter);
+app.use("/auth", authRouter);
 // app.use("/suppliers", suppliersRouter);
 // app.use("/orders", ordersRouter);
 
@@ -26,6 +28,10 @@ app.use((_req: Request, res: Response) => {
 
 // Central error handler — one place that turns thrown errors into responses.
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+  if (err instanceof AppError) {
+    res.status(err.statusCode).json({ error: err.message });
+    return;
+  }
   console.error(err);
   res.status(500).json({ error: "Internal server error" });
 });
