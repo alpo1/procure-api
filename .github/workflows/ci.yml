@@ -17,4 +17,4 @@ jobs:
       - run: npm ci
       - run: npm run build
       # A test step is added once the first tests land (auth feature).
-      # - run: npm test
+      - run: npm test
