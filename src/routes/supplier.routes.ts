@@ -9,6 +9,7 @@ import {
   createSupplierHandler,
   updateSupplierHandler,
   deleteSupplierHandler,
+  importCatalogHandler,
 } from "../controllers/supplier.controller";
 
 export const suppliersRouter = Router();
@@ -37,4 +38,13 @@ suppliersRouter.delete(
   requireAuth,
   requireRole("admin"),
   asyncHandler(deleteSupplierHandler)
+);
+
+// No validateBody here — the body is a raw CSV byte stream, not JSON, so
+// there's nothing to run through the JSON-body zod middleware.
+suppliersRouter.post(
+  "/:id/catalog/import",
+  requireAuth,
+  requireRole("admin"),
+  asyncHandler(importCatalogHandler)
 );

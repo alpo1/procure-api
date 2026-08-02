@@ -1,0 +1,4 @@
+sku,name,unit_price,unit
+,No SKU here,1.00,pcs
+SKU-004,Bad price,abc,pcs
+SKU-005,Good row,0.50,pcs

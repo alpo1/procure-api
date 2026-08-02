@@ -84,6 +84,13 @@ routes additionally require the token's role to be `admin`.
 | POST   | `/`             | Any user   | Create an order + items in a single transaction; total is computed server-side | 201, 400 |
 | PATCH  | `/:id/status`   | Admin only | Change status to `draft` \| `approved` \| `cancelled`  | 200, 400, 403, 404    |
 
+### CSV import/export
+
+| Method | Path                          | Auth       | Notes                                                | Status codes    |
+|--------|-------------------------------|------------|--------------------------------------------------------|-----------------|
+| POST   | `/suppliers/:id/catalog/import` | Admin only | Upload a `text/csv` catalog (`sku,name,unit_price,unit`); parsed and inserted as a fully streamed pipeline, never buffering the file in memory. Returns `{ imported, failed }` | 200, 400, 404, 403 |
+| GET    | `/orders/export.csv`          | Any user   | Downloads all orders as CSV; rows are serialized and written to the response incrementally as they're read, rather than building the whole file in memory | 200             |
+
 ## Running locally
 
 Requires Docker, or your own PostgreSQL + MongoDB instances (this project's
@@ -137,7 +144,7 @@ docker compose up --build
 - [x] Auth: register / login, JWT, bcrypt, role-based middleware, tests
 - [x] Suppliers & purchase orders CRUD (with a transaction for order + items)
 - [x] Audit log written to MongoDB on key write actions
-- [ ] CSV catalog import + orders export using Node streams
+- [x] CSV catalog import + orders export using Node streams
 
 ## A note on AI-assisted development
 

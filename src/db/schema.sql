@@ -33,3 +33,14 @@ CREATE TABLE IF NOT EXISTS order_items (
   quantity    INTEGER NOT NULL CHECK (quantity > 0),
   unit_price  NUMERIC(12,2) NOT NULL CHECK (unit_price >= 0)
 );
+
+CREATE TABLE IF NOT EXISTS catalog_items (
+  id          SERIAL PRIMARY KEY,
+  supplier_id INTEGER NOT NULL REFERENCES suppliers(id) ON DELETE CASCADE,
+  sku         TEXT NOT NULL,
+  name        TEXT NOT NULL,
+  unit_price  NUMERIC(12,2) NOT NULL CHECK (unit_price >= 0),
+  unit        TEXT,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (supplier_id, sku)
+);
