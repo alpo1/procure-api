@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import pinoHttp from "pino-http";
 import { authRouter } from "./routes/auth.routes";
+import { suppliersRouter } from "./routes/supplier.routes";
 import { AppError } from "./errors/app-error";
 
 // The Express app is built here (routes + middleware) but NOT started.
@@ -18,7 +19,7 @@ app.get("/health", (_req: Request, res: Response) => {
 
 // Feature routers will be mounted here as we build them:
 app.use("/auth", authRouter);
-// app.use("/suppliers", suppliersRouter);
+app.use("/suppliers", suppliersRouter);
 // app.use("/orders", ordersRouter);
 
 // 404 for anything unmatched.
