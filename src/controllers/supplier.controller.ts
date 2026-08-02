@@ -4,10 +4,10 @@ import { parseId } from "../utils/parse-id";
 import {
   findAllSuppliers,
   findSupplierById,
-  createSupplier,
   updateSupplier,
   deleteSupplier,
 } from "../repositories/supplier.repository";
+import { createSupplier } from "../services/supplier.service";
 
 export async function listSuppliers(_req: Request, res: Response): Promise<void> {
   const suppliers = await findAllSuppliers();
@@ -24,7 +24,7 @@ export async function getSupplier(req: Request, res: Response): Promise<void> {
 }
 
 export async function createSupplierHandler(req: Request, res: Response): Promise<void> {
-  const supplier = await createSupplier(req.body);
+  const supplier = await createSupplier(req.body, req.user!.id);
   res.status(201).json(supplier);
 }
 

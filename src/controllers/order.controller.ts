@@ -1,12 +1,8 @@
 import { Request, Response } from "express";
 import { AppError } from "../errors/app-error";
 import { parseId } from "../utils/parse-id";
-import {
-  findAllOrders,
-  findOrderWithItems,
-  createOrderWithItems,
-  updateOrderStatus,
-} from "../repositories/order.repository";
+import { findAllOrders, findOrderWithItems } from "../repositories/order.repository";
+import { createOrderWithItems, updateOrderStatus } from "../services/order.service";
 
 export async function listOrders(_req: Request, res: Response): Promise<void> {
   const orders = await findAllOrders();
@@ -29,7 +25,7 @@ export async function createOrderHandler(req: Request, res: Response): Promise<v
 
 export async function updateOrderStatusHandler(req: Request, res: Response): Promise<void> {
   const id = parseId(req.params.id);
-  const order = await updateOrderStatus(id, req.body.status);
+  const order = await updateOrderStatus(id, req.body.status, req.user!.id);
   if (!order) {
     throw new AppError(404, "Order not found");
   }
